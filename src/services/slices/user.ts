@@ -58,6 +58,10 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const getUser = createAsyncThunk('user/getUserrr', async () =>
+  getUserApi()
+);
+
 export const logOutUser = createAsyncThunk(
   'user/logOutUser',
   async () => await logoutApi()
@@ -80,6 +84,10 @@ const userSlice = createSlice({
     builder.addCase(logOutUser.fulfilled, (state) => {
       state.user.name = '';
       state.user.email = '';
+    });
+    builder.addCase(getUser.fulfilled, (state, { payload }) => {
+      console.log(payload, payload);
+      state.user = payload.user;
     });
   },
   selectors: {

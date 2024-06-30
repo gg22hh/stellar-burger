@@ -10,7 +10,7 @@ type IInitialState = {
 
 const initialState: IInitialState = {
   isIngrediendsLoading: true,
-  ingredients: {}
+  ingredients: []
 };
 
 export const getIngredients = createAsyncThunk(

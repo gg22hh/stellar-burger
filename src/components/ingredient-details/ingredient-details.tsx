@@ -10,7 +10,7 @@ export const IngredientDetails: FC = () => {
   const params = useParams();
   const ingredients = useSelector(getIngredientsSelector);
   /** TODO: взять переменную из стора */
-  const ingredientData = ingredients.filter(
+  const ingredientData = ingredients?.filter(
     (i: TIngredient) => i._id === params.id
   )[0];
 

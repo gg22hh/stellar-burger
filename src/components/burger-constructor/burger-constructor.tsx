@@ -9,9 +9,14 @@ import {
   getOrderModalDataSelector,
   getOrderRequestSelector
 } from '../../services/slices/orders';
+import { getUserDataSelector } from '../../services/slices/user';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
+  const user = useSelector(getUserDataSelector);
+  const location = useLocation();
+  const navigate = useNavigate();
   const constructorItems = useSelector(getBurgerIngredient);
   const dispatch = useDispatch();
 
@@ -20,6 +25,10 @@ export const BurgerConstructor: FC = () => {
   const orderModalData = useSelector(getOrderModalDataSelector);
 
   const onOrderClick = () => {
+    if (!user.name) {
+      // return <Navigate to='/login' state={{ from: location }} />;
+      navigate('/login', { state: { from: location } });
+    }
     if (!constructorItems.bun || orderRequest) return;
     dispatch(addOrder(constructorItems.ingredients.map((ing) => ing._id)));
   };
