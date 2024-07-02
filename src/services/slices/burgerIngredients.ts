@@ -44,7 +44,6 @@ const burgerIngredientSlice = createSlice({
       newItems[index1] = newItems[index2];
       newItems[index2] = temp;
 
-      console.log(newItems, 'newItems');
       state.ingredients = newItems;
     }
   },

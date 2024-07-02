@@ -26,8 +26,8 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!user.name) {
-      // return <Navigate to='/login' state={{ from: location }} />;
       navigate('/login', { state: { from: location } });
+      return;
     }
     if (!constructorItems.bun || orderRequest) return;
     dispatch(addOrder(constructorItems.ingredients.map((ing) => ing._id)));

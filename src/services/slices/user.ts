@@ -7,7 +7,6 @@ import {
   updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TUser } from '@utils-types';
 import { getCookie, setCookie } from '../../utils/cookie';
 
 type TUserData = {
@@ -21,13 +20,15 @@ type IInitialState = {
     name: string;
     email: string;
   };
+  isUserAuth: boolean;
 };
 
 const initialState: IInitialState = {
   user: {
     name: '',
     email: ''
-  }
+  },
+  isUserAuth: false
 };
 
 export const registerUser = createAsyncThunk(
@@ -67,10 +68,27 @@ export const logOutUser = createAsyncThunk(
   async () => await logoutApi()
 );
 
+export const checkUserAuth = createAsyncThunk(
+  'user/checkUser',
+  (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      dispatch(getUser()).finally(() => {
+        dispatch(authChecked());
+      });
+    } else {
+      dispatch(authChecked());
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    authChecked: (state) => {
+      state.isUserAuth = true;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(registerUser.fulfilled, (state, { payload }) => {
       state.user = payload.user;
@@ -86,14 +104,16 @@ const userSlice = createSlice({
       state.user.email = '';
     });
     builder.addCase(getUser.fulfilled, (state, { payload }) => {
-      console.log(payload, payload);
       state.user = payload.user;
     });
   },
   selectors: {
-    getUserDataSelector: (state) => state.user
+    getUserDataSelector: (state) => state.user,
+    getIsUserAuthSelector: (state) => state.isUserAuth
   }
 });
 
 export const reducer = userSlice.reducer;
-export const { getUserDataSelector } = userSlice.selectors;
+export const { authChecked } = userSlice.actions;
+export const { getUserDataSelector, getIsUserAuthSelector } =
+  userSlice.selectors;

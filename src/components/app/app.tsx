@@ -18,7 +18,11 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredients';
 import { ProtectedRoute } from '../protectedRoute';
-import { getUserDataSelector, getUser } from '../../services/slices/user';
+import {
+  getUserDataSelector,
+  getUser,
+  checkUserAuth
+} from '../../services/slices/user';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -28,6 +32,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
+    dispatch(checkUserAuth());
     dispatch(getUser());
     if (user.name) {
       navigate(location.state?.form ? location.state.from.pathname : '/');
@@ -67,32 +72,34 @@ const App = () => {
         <Route path='/profile/orders/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
-      <Routes>
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <Modal title='Детали заказа' onClose={() => navigate(-1)}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title='Детали заказа' onClose={() => navigate(-1)}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-      </Routes>
+      {background && (
+        <Routes>
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal title='Детали заказа' onClose={() => navigate(-1)}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal title='Детали заказа' onClose={() => navigate(-1)}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };

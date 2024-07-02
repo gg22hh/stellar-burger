@@ -25,8 +25,6 @@ export const Register: FC = () => {
     navigate('/');
   };
 
-  console.log(user, 'user');
-
   return (
     <RegisterUI
       errorText=''

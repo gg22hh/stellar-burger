@@ -12,14 +12,11 @@ export const OrderInfo: FC = () => {
   const params = useParams();
   const paramsNumber = params.number ? +params.number : 0;
   const location = useLocation();
-  console.log(location, 'location');
   const feed = useSelector(getFeedsSelector);
   const orders = useSelector(getOrdersSelector);
   /** TODO: взять переменные orderData и ingredients из стора */
-  // const orderData = orders.filter((o) => o.number === paramsNumber)[0];
   const ordersArray = location.pathname.includes('feed') ? feed.orders : orders;
   const orderData = ordersArray.find((o) => o.number === paramsNumber);
-  // console.log(justForCheck, 'justForCheck');
 
   const ingredients: TIngredient[] = useSelector(getIngredientsSelector);
 
